@@ -30,6 +30,21 @@ export const PeopleTable: React.FC<Props> = ({ people, selectedSlug }) => {
               const mother = people.find(p => p.name === person.motherName);
               const father = people.find(p => p.name === person.fatherName);
 
+              const renderParent = (
+                parent: Person | undefined,
+                parentName?: string | null,
+              ) => {
+                if (!parentName) {
+                  return '-';
+                }
+
+                if (parent) {
+                  return <PersonLink person={parent} />;
+                }
+
+                return parentName;
+              };
+
               return (
                 <tr
                   key={person.slug}
@@ -46,8 +61,8 @@ export const PeopleTable: React.FC<Props> = ({ people, selectedSlug }) => {
                   <td>{person.born}</td>
                   <td>{person.died}</td>
 
-                  <td>{mother ? <PersonLink person={mother} /> : '-'}</td>
-                  <td>{father ? <PersonLink person={father} /> : '-'}</td>
+                  <td>{renderParent(mother, person.motherName)}</td>
+                  <td>{renderParent(father, person.fatherName)}</td>
                 </tr>
               );
             })}
