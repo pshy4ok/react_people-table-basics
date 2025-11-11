@@ -5,6 +5,7 @@ type Props = {
   people: Person[];
   selectedSlug?: string;
 };
+
 export const PeopleTable: React.FC<Props> = ({ people, selectedSlug }) => {
   return (
     <div className="block">
@@ -25,41 +26,31 @@ export const PeopleTable: React.FC<Props> = ({ people, selectedSlug }) => {
           </thead>
 
           <tbody>
-            {people.map(person => (
-              <tr
-                key={person.slug}
-                data-cy="person"
-                className={
-                  person.slug === selectedSlug ? 'has-background-warning' : ''
-                }
-              >
-                <td>
-                  <PersonLink
-                    name={person.name}
-                    people={people}
-                    sex={person.sex}
-                  />
-                </td>
+            {people.map(person => {
+              const mother = people.find(p => p.name === person.motherName);
+              const father = people.find(p => p.name === person.fatherName);
 
-                <td>{person.sex}</td>
-                <td>{person.born}</td>
-                <td>{person.died}</td>
-                <td>
-                  {person.motherName ? (
-                    <PersonLink name={person.motherName} people={people} />
-                  ) : (
-                    '-'
-                  )}
-                </td>
-                <td>
-                  {person.fatherName ? (
-                    <PersonLink name={person.fatherName} people={people} />
-                  ) : (
-                    '-'
-                  )}
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr
+                  key={person.slug}
+                  data-cy="person"
+                  className={
+                    person.slug === selectedSlug ? 'has-background-warning' : ''
+                  }
+                >
+                  <td>
+                    <PersonLink person={person} />
+                  </td>
+
+                  <td>{person.sex}</td>
+                  <td>{person.born}</td>
+                  <td>{person.died}</td>
+
+                  <td>{mother ? <PersonLink person={mother} /> : '-'}</td>
+                  <td>{father ? <PersonLink person={father} /> : '-'}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
